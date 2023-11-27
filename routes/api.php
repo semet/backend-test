@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TransactionController;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', fn (Request $request) => $request->user());
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::get('/all-products', [ProductController::class, 'all']);
+    Route::post('/product/store', [ProductController::class, 'store']);
+    Route::get('/product/search', [ProductController::class, 'search']);
+    Route::get('/product/{id}', [ProductController::class, 'edit']);
+    Route::post('/product/update/{id}', [ProductController::class, 'update']);
+    Route::get('/product/delete/{id}', [ProductController::class, 'destroy']);
+
+    Route::get('/transactions', [TransactionController::class, 'index']);
 });
+Route::get('/transaction/create', [TransactionController::class, 'store']);
